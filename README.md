@@ -54,7 +54,7 @@ Para ejecutar el contenedor sin argumentos, el creador del archivos yml inicial
 
 Para ejecutar el contenedor pesándole un archivo yml de con las configuración y las acciones
 
-    docker run -it --rm -v $(pwd)/app:/app -e mypath=$(pwd) manologcode/sswtest python app.py manolog_es.yml
+    docker run -it --rm -v$(pwd):/app/data_ext -e mypath=$(pwd) manologcode/sswtest python app.py manolog_es.yml
 
 He creado una archivo sh para ejecutar el contenedor y no escribir tantas sentencia docker **sswtest.sh**. Copiándose a nuestro source, se nos cargar los comandos cortos para usarlos rápidamente en esta sesión de terminal:
 

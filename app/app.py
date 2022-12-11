@@ -58,8 +58,7 @@ class Test():
             path_imgs_ini = f"{self.config['path']}{self.config['compare']}"
             path_imgs_now = self.config['path_project']
         result = MyImage.compare_two_folders(path_imgs_now, path_imgs_ini)
-        url_relative = self.create_response_html(
-            path_imgs_ini, path_imgs_now, result)
+        url_relative = self.create_response_html(path_imgs_ini, path_imgs_now, result)
         InOutData.open_in_browser(url_relative)
 
     def tour_pages(self, pages):
@@ -176,7 +175,7 @@ class Test():
         """
         f.write(html)
         f.close()
-        return path_file
+        return path_file[9:]
 
 
 if __name__ == "__main__":
