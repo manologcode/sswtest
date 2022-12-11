@@ -1,0 +1,11 @@
+folder_export: data_ext/
+
+find_urls:
+    data_yml:
+        config: 
+            name: 'ejemplo'
+            folder: 'inicial'
+            size_screen: '1420,1080'
+            compare: ''
+        pages: []
+
