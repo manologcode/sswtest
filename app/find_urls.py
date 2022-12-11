@@ -11,9 +11,9 @@ class FindUrls():
     def __init__(self, domain, exclude=None, custom_links=False):
         self.custom_links = custom_links
         self.exclude = exclude
-        self.name_file = self.extract_name_to_url(domain)
         if domain.endswith('/'):
             domain = domain[:-1]
+        self.name_file = self.extract_name_to_url(domain)
         self.domain = domain
         self.first_pass(domain)
         self.run_all_links()
@@ -36,7 +36,7 @@ class FindUrls():
                 self.urls[link] = True
         size_links = len(self.urls)
         self.prepare_links(new_links)
-        if size_links < len(self.urls):
+        if size_links < len(self.urls) and size_links > 50:
             self.run_all_links()
         else:
             if self.custom_links:
@@ -50,7 +50,9 @@ class FindUrls():
                 if not link.startswith(self.domain):
                     link = None
             else:
-                link = self.domain + link
+                if link.startswith('/'):
+                    link = link[1:]
+                link = self.domain + '/' + link
             # if link is not None and self.exclude is not None:
             #     for excl in self.exclude.split(','):
             #         if excl in link:

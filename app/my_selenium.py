@@ -2,6 +2,8 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
+from my_bs4 import MyBs4
+
 class MySelenium(): 
 
     def __init__(self, url, size='400,1080'):
@@ -22,8 +24,9 @@ class MySelenium():
         self.browser.save_screenshot(path_photo)
 
     def visit(self):
-        print(f"Visit: {self.url}")
-        self.browser.get(self.url)
+        if MyBs4.uri_exists(self.url): 
+            print(f"Visit: {self.url}")
+            self.browser.get(self.url)
 
     def input(self,attr_type,attr_val,value):
         self.browser.find_element(attr_type,attr_val).send_keys(value)

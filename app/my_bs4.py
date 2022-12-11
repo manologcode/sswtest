@@ -11,6 +11,7 @@ class MyBs4:
     @staticmethod
     def read_page(url):
         soup=None
+        code=None
         USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0"
         headers = {"user-agent": USER_AGENT}
         try:
@@ -18,9 +19,22 @@ class MyBs4:
             code = resp.status_code 
         except requests.exceptions.ConnectionError as e:
             print("Error Read Url", e)
-        if code == 200:
+        if code is not None and code == 200:
             soup = BeautifulSoup(resp.content, "html.parser")
-        return soup
+            return soup
+        else:
+            print(f"Error: url{url}")
+
+    @staticmethod
+    def uri_exists(url):
+        response= False
+        if len(url.split('.')) > 1 and url.startswith("http"):
+            r = requests.get(url, stream=True)
+            if r.status_code == 200:
+                response = True
+
+        return response
+    
     
     @staticmethod
     def get_links(url):

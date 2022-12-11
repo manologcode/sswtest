@@ -36,28 +36,27 @@ pages:
 
 ```
 
-
-Donde la parte de configuracion podemos modificar:
+Donde la parte de configuración podemos modificar:
 
 | option | tipo  | required  |  description  |
 |--------|--------|----------|------------|
 | name  |  string  | true | Nombre de la carpeta del proyecto, si existe se toma el nombre del archivo yml   |
 | folder  |  string  | true | Nombre de la carpeta de almacenamiento de las capturas actuales, si existe la crea con la fecha actual |
 | size_screen  | array  |  false  | resoluciones a las que queremos las capturas  |
-| compare  | array  |  false  | carpeta con la que va a comparar las imagenes de las capturas actuales |
+| compare  | array  |  false  | carpeta con la que va a comparar las imágenes de las capturas actuales |
 
 
 ## correr el contenedor
 
-Para ejecutar el contenedor sin argumentos, el creador del archivos yml
+Para ejecutar el contenedor sin argumentos, el creador del archivos yml inicial
 
-    docker run -it --rm -v $(pwd):/app/data_ext manologcode/sswtest    
+    docker run -it --rm -v $(pwd):/app/data_ext manologcode/sswtest
 
-Para ejecutar el contenedor pasandoles un archivo yml de multiples urls
+Para ejecutar el contenedor pesándole un archivo yml de con las configuración y las acciones
 
-    docker run -it --rm -v $(pwd):/app/data_ext manologcode/sswtest python app.py manolog_es.yml
+    docker run -it --rm -v $(pwd)/app:/app -e mypath=$(pwd) manologcode/sswtest python app.py manolog_es.yml
 
-He creado una archivo sh para ejecutar el contenedor y no escribir tantas sentencia docker **sswtest.sh**. Copiandolo a nuestro source, se nos cargar los comandos cortos para usarlos rápidamente en esta sesión de terminal:
+He creado una archivo sh para ejecutar el contenedor y no escribir tantas sentencia docker **sswtest.sh**. Copiándose a nuestro source, se nos cargar los comandos cortos para usarlos rápidamente en esta sesión de terminal:
 
     source <(curl -s https://raw.githubusercontent.com/manologcode/sswtest/master/sswtest.sh)
 

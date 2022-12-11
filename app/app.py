@@ -9,8 +9,9 @@ from find_urls import FindUrls
 from my_selenium import MySelenium
 from my_image import MyImage
 
+
 class Test():
-    config=InOutData.read_yaml('config.yml')
+    config = InOutData.read_yaml('config.yml')
 
     folder = config['folder_export']
 
@@ -20,8 +21,8 @@ class Test():
         self.config = self.read_config(config_yml)
 
     def read_config(self, config_yml):
-        options ={ 'path': f"{self.folder}{self.name_project}/",
-                   'name_folder' : datetime.now().strftime("%Y_%m_%d"),
+        options = {'path': f"{self.folder}{self.name_project}/",
+                   'name_folder': datetime.now().strftime("%Y_%m_%d"),
                    'size_screen': '1420,1080',
                    'compare': None
                    }
@@ -34,7 +35,8 @@ class Test():
             options['size_screen'] = config_yml['size_screen']
         if 'compare' in config_yml and config_yml['compare'] is not None and config_yml['compare'] != '':
             options['compare'] = config_yml['compare']
-        options['path_project'] = self.create_folder(options['path'], options['name_folder'])
+        options['path_project'] = self.create_folder(
+            options['path'], options['name_folder'])
         return options
 
     def url_to_name(self, url):
@@ -46,39 +48,26 @@ class Test():
 
     def create_folder(self, path, name):
         path_exit = path + name
-        if not os.path.exists(path_exit):
-            os.makedirs(path_exit)
+        path_exit = InOutData.name_folder_free(path_exit)
+        os.makedirs(path_exit)
         print(f"creando carpeta: {path_exit}")
         return path_exit
 
-    def name_file_free(self, file_name):
-        part = file_name.split('.')
-        name = part[0]
-        ext = part[1]
-        file_name = f"{name}.{ext}"
-        if os.path.isfile(file_name):
-            counter = 0
-            while os.path.isfile(file_name):
-                counter += 1
-                file_name = f"{name}({counter}).{ext}"
-        return file_name
-
     def compare_images(self):
         if self.config['compare'] is not None:
-            path_imgs_ini= f"{self.config['path']}{self.config['compare']}"
-            path_imgs_now= self.config['path_project']
-        result = MyImage.compare_two_folders(path_imgs_now,path_imgs_ini)
-        self.create_response_terminal(path_imgs_ini, path_imgs_now, result)
-        url_relative = self.create_response_html(path_imgs_ini, path_imgs_now, result)
+            path_imgs_ini = f"{self.config['path']}{self.config['compare']}"
+            path_imgs_now = self.config['path_project']
+        result = MyImage.compare_two_folders(path_imgs_now, path_imgs_ini)
+        url_relative = self.create_response_html(
+            path_imgs_ini, path_imgs_now, result)
         InOutData.open_in_browser(url_relative)
-
 
     def tour_pages(self, pages):
         for item in pages:
             url = item['url']
             nsel = MySelenium(url, self.config['size_screen'])
             nsel.visit()
-            actions =item['actions']
+            actions = item['actions']
             self.tour_actions(actions, nsel, url)
 
     def tour_actions(self, actions, nsel, url):
@@ -93,29 +82,13 @@ class Test():
 
             if 'photo' in action:
                 print(action)
-                if action['photo'] is not None and action['photo'] !='':
+                if action['photo'] is not None and action['photo'] != '':
                     name = action['photo']+".png"
                 else:
                     name = self.url_to_name(url)
                 path_photo = self.config['path_project'] + '/' + name
-                path_photo = self.name_file_free(path_photo)
+                path_photo = InOutData.name_file_free(path_photo)
                 nsel.photo(path_photo)
-
-    def create_response_terminal(self, path1, path2, result):
-        print("")
-        print("Easy Screen Short Web Test")
-        print("--------------------------")
-        print("")
-        print("Resultados de Test")
-        print(f"Comparando {path1[9:]} == {path2[9:]}")
-        for item in result:
-            if item['diff'] < 0.1:
-                print('\033[32m' + f"OK - {item['file']}")
-            else:
-                print('\033[31m' + f"KO - {item['file']}")
-        print('\033[0m')
-        print("puede ver el resultado en el navegador en:")
-
 
     def create_response_html(self, path1, path2, result):
         path_file = f"{ self.config['path'] }index.html"
@@ -130,18 +103,41 @@ class Test():
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Easy Screen Short Web Test</title>
     <style>
+        html {
+            font-family: Helvetica, Arial, sans-serif;
+        }
+        h4{
+            margin: 4px;
+        }
+        img{
+            width: 45%;
+        }
+        a{
+            text-decoration: none;
+            display: block;
+            font-size: 16px;
+            padding: 6px 10px;
+        }
+        .a-img{
+            text-align: center;
+        }
         .success{
             color: green;
+            background-color: honeydew;
+            border: solid 1px green;
+            border-radius: 10px;
+            margin: 6px;
         }
         .warning{
             color:red;
+            background-color: #f9e8e8;
+            border: solid 1px green;
+            border-radius: 10px;
+            margin: 6px;
         }
         .d-flex{
             display: flex;
             justify-content: space-evenly;
-        }
-        .d-flex > img {
-            width: 45%;
         }
     </style>
 </head>
@@ -149,22 +145,33 @@ class Test():
         <h2>Resultados de Test</h2>"""
         html += f"        <p>Comparando {path1[9:]} == {path2[9:]}.</p>"
         for item in result:
-            if item['diff'] < 0.1:
-                fragmen=f"""
-            <div class="success">
-                <h4>OK - {item['file']}</4>
-            </div> """
+            if isinstance(item['diff'], str):
+                fragmen = f"""
+             <a href="{path_img2}/{item['file']}" class="warning" target="_blank">
+                {item['diff']} - {item['file']}
+             </a>
+            """
+            elif item['diff'] < 0.1:
+                fragmen = f"""
+                <a href="{path_img2}/{item['file']}" class="success" target="_blank">
+                    OK - {item['file']}
+                </a>
+            """
             else:
-                fragmen=f"""
+                fragmen = f"""
             <div class="warning">
-                <h4>KO - {item['file']}</4>
+                <h4>KO - {item['file']}</h4>
                 <div class="d-flex">
-                    <img src={path_img1}/{item['file']}>
-                    <img src={path_img2}/{item['file']}>
+                <a href="{path_img1}/{item['file']}" class="a-img" target="_blank">
+                    <img src="{path_img1}/{item['file']}">
+                </a>
+                <a href="{path_img2}/{item['file']}" class="a-img" target="_blank">
+                    <img src="{path_img2}/{item['file']}">
                 </div>
+                </a>
             </div> """
             html += fragmen
-        html+="""    </body>
+        html += """    </body>
 </html>
         """
         f.write(html)
@@ -183,8 +190,8 @@ if __name__ == "__main__":
         test.tour_pages(in_data['pages'])
         test.compare_images()
     else:
-        print('Crea y compara capturas de pantalla de url enviadas a traves de un archivo yml de configuracion.')
-        print('para conocer todas las opciones de configuración y acceso entra en la git.')
+        print('Crea y compara capturas de pantalla de url enviadas a traves de un archivo yml de configuración.')
+        print('Para conocer todas las opciones de configuración y acceso entra en la git. https://github.com/manologcode/sswtest')
         print('Este programa también genera este archivo yml y captura urls automáticamente a partir de esa url inicial.')
 
         config = {
@@ -194,5 +201,4 @@ if __name__ == "__main__":
             }
         }
         in_data = InOutData.input_data(config)
-        FindUrls(in_data['url'],custom_links=True)
-
+        FindUrls(in_data['url'], custom_links=True)

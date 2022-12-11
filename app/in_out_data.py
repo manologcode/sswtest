@@ -59,11 +59,28 @@ class InOutData():
         print(f"Creando: {file_name}")
         with open( InOutData.config['folder_export'] + file_name, 'w') as f:
             data = yaml.dump(data, f, sort_keys=False)
+    
+    @staticmethod
+    def name_file_free(path_file_name):
+        part = path_file_name.split('.')
+        name = part[0]
+        ext = part[1]
+        path_file_name = f"{name}.{ext}"
+        if os.path.isfile(path_file_name):
+            counter = 0
+            while os.path.isfile(path_file_name):
+                counter += 1
+                path_file_name = f"{name}({counter}).{ext}"
+        return path_file_name
 
-    # @staticmethod
-    # def clean_name(name):
-    #     parts = name.split('.')
-    #     return '_'.join(parts.pop()) 
+    @staticmethod
+    def name_folder_free(path_file_name):
+        if os.path.isdir(path_file_name):
+            counter = 0
+            while os.path.isdir(path_file_name):
+                counter += 1
+                path_file_name = f"{path_file_name}_{counter}"
+        return path_file_name
 
     @staticmethod
     def read_params():
@@ -81,7 +98,8 @@ class InOutData():
 
     @staticmethod
     def open_in_browser(url_relative):
-        fileurl ='file://' + os.environ['mypath'] +'/app/'+ url_relative
+        fileurl ='file://' + os.environ['mypath'] +'/'+ url_relative
+        # fileurl ='file://' + os.environ['mypath'] +'/app/'+ url_relative
         print(fileurl)
         # os.system('x-www-browser" '+ fileurl )
 

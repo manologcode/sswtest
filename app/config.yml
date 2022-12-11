@@ -8,4 +8,5 @@ find_urls:
             size_screen: '1420,1080'
             compare: ''
         pages: []
+    number_limit: 50
 

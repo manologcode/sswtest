@@ -10,6 +10,6 @@ correr la imagen sobrescribiendo la carpeta app y accediendo al shell
 
 correr la imagen sobrescribiendo app con los nuevos cambios
 
-    docker run -it --rm -v $(pwd)/app:/app -e mypath=${pwd} manologcode/sswtest python app.py
+    docker run -it --rm -v $(pwd)/app:/app -e mypath=$(pwd) manologcode/sswtest python app.py
 
 #
