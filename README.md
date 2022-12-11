@@ -4,7 +4,8 @@ Este es un proyecto para poder hacer testing de aplicaciones web de forma fácil
 
 Se trata de un artefacto dockerizado de varias librerías de python combinadas para testear aplicaciones web mediante la comparación de capturas de pantalla.
 
-para correr la aplicación necesitamos pásenle la información mediante un archivo yml con las instrucciones:
+
+Para correr la aplicación necesitamos pásenle la información mediante un archivo yml con las instrucciones:
 
 
 ejemplo de archivo básico.
@@ -36,7 +37,7 @@ pages:
 ```
 
 
-donde la parte de configuracion podemos modificar:
+Donde la parte de configuracion podemos modificar:
 
 | option | tipo  | required  |  description  |
 |--------|--------|----------|------------|
@@ -46,13 +47,28 @@ donde la parte de configuracion podemos modificar:
 | compare  | array  |  false  | carpeta con la que va a comparar las imagenes de las capturas actuales |
 
 
-crear las capturas en un carpeta con la fecha por defecto
+## correr el contenedor
 
+Para ejecutar el contenedor sin argumentos, el creador del archivos yml
 
-pasar parametros
+    docker run -it --rm -v $(pwd):/app/data_ext manologcode/sswtest    
 
+Para ejecutar el contenedor pasandoles un archivo yml de multiples urls
 
+    docker run -it --rm -v $(pwd):/app/data_ext manologcode/sswtest python app.py manolog_es.yml
 
--compare="namefolder"
--autourls
--photos=false
+He creado una archivo sh para ejecutar el contenedor y no escribir tantas sentencia docker **sswtest.sh**. Copiandolo a nuestro source, se nos cargar los comandos cortos para usarlos rápidamente en esta sesión de terminal:
+
+    source <(curl -s https://raw.githubusercontent.com/manologcode/sswtest/master/sswtest.sh)
+
+ya podemos ejecutar los siguientes comandos
+
+    sswtest -> ejecutar la aplicación.
+    sswtest archivourls.yml
+    sswtest-rmi -> borrar la imagen del contenedor
+
+## Eliminar la imagen de docker
+
+Si no vamos a utilizar mas la aplicación y no queremos que nos ocupe espacio en disco la podemos borrar
+
+    docker rmi manologcode/sswtest
