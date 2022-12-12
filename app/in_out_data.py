@@ -6,7 +6,6 @@ from yaml.loader import SafeLoader
 
 class InOutData():
 
-
     @staticmethod
     def read_yaml(file_name):
         if os.path.isfile(file_name):

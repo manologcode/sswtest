@@ -2,10 +2,6 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 
-# import urllib3
-
-# urllib3.disable_warnings()
-
 class MyBs4:
 
     @staticmethod
@@ -22,8 +18,7 @@ class MyBs4:
         if code is not None and code == 200:
             soup = BeautifulSoup(resp.content, "html.parser")
             return soup
-        else:
-            print(f"Error: url{url}")
+
 
     @staticmethod
     def uri_exists(url):
@@ -32,10 +27,8 @@ class MyBs4:
             r = requests.get(url, stream=True)
             if r.status_code == 200:
                 response = True
-
         return response
-    
-    
+
     @staticmethod
     def get_links(url):
         soup= MyBs4.read_page(url)
@@ -62,8 +55,4 @@ class MyBs4:
         else:
             content = soup.find(tag, obj_id)
         return content
-
-
-
-
 
