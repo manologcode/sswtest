@@ -73,12 +73,13 @@ class InOutData():
         return path_file_name
 
     @staticmethod
-    def name_folder_free(path_file_name):
-        if os.path.isdir(path_file_name):
+    def name_folder_free(name_ini):
+        if os.path.isdir(name_ini):
+            path_file_name = name_ini
             counter = 0
             while os.path.isdir(path_file_name):
                 counter += 1
-                path_file_name = f"{path_file_name}_{counter}"
+                path_file_name = f"{name_ini}_{counter}"
         return path_file_name
 
     @staticmethod

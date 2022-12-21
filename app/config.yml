@@ -7,6 +7,8 @@ find_urls:
             folder: 'inicial'
             size_screen: '1420,1080'
             compare: ''
+            img_presicion: 0.1
+            
         pages: []
     number_limit: 50
 

@@ -54,12 +54,12 @@ class Test():
         return path_exit
 
     def compare_images(self):
-        if self.config['compare'] is not None:
+        if self.config['compare'] is not None and self.config['compare'] != "":
             path_imgs_ini = f"{self.config['path']}{self.config['compare']}"
             path_imgs_now = self.config['path_project']
-        result = MyImage.compare_two_folders(path_imgs_now, path_imgs_ini)
-        url_relative = self.create_response_html(path_imgs_ini, path_imgs_now, result)
-        InOutData.open_in_browser(url_relative)
+            result = MyImage.compare_two_folders(path_imgs_now, path_imgs_ini)
+            url_relative = self.create_response_html(path_imgs_ini, path_imgs_now, result)
+            InOutData.open_in_browser(url_relative)
 
     def tour_pages(self, pages):
         for item in pages:

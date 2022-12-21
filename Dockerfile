@@ -12,6 +12,7 @@ RUN apk add build-base jpeg-dev zlib-dev
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV TZ Europe/Madrid
 
 RUN adduser -D myuser
 USER myuser
